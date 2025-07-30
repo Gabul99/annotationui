@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { saveSessionResult } from "../services/dataService";
+// import { saveSessionResult } from "../services/dataService";
 import type { SessionResult } from "../types";
 import { useNavigate } from "react-router-dom";
 
