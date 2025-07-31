@@ -10,6 +10,7 @@ import type {
   AdditionalSentence,
   Behavior,
 } from "../types";
+import { TASK_META } from "../types/taskMetaInfo";
 
 interface EvaluationPageProps {
   onComplete: (result: SessionResult) => void;
@@ -26,6 +27,9 @@ const LeftPanel = styled.div`
   padding: 30px;
   background: white;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `;
 
 const RightPanel = styled.div`
@@ -33,13 +37,15 @@ const RightPanel = styled.div`
   padding: 30px;
   background: #f8f9fa;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
   padding-bottom: 20px;
   border-bottom: 2px solid #e9ecef;
 `;
@@ -61,7 +67,6 @@ const TextContainer = styled.div`
 `;
 
 const CriteriaSection = styled.div`
-  margin-top: 30px;
   padding: 20px;
   background: #e3f2fd;
   border-radius: 8px;
@@ -250,6 +255,7 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ onComplete }) => {
   const [additionalSentences, setAdditionalSentences] = useState<
     AdditionalSentence[]
   >([{ sentence: "" }]);
+  const meta = TASK_META[datasetNumber ?? "1"];
 
   const responseRef = useRef<HTMLDivElement>(null);
 
@@ -402,6 +408,8 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ onComplete }) => {
           </Progress>
         </Header>
 
+        <TextContainer>Query: {dataPoint.query}</TextContainer>
+
         <TextContainer>
           <div style={{ whiteSpace: "pre-wrap" }} ref={responseRef}>
             {dataPoint.response}
@@ -411,11 +419,9 @@ const EvaluationPage: React.FC<EvaluationPageProps> = ({ onComplete }) => {
         <CriteriaSection>
           <CriteriaTitle>평가 기준</CriteriaTitle>
           <CriteriaText>
-            각 annotation에 대해 다음을 고려하여 평가해주세요:
+            {meta.criteria.title}
             <ul>
-              <li>해당 텍스트가 감정적 표현이나 행동 패턴을 잘 나타내는가?</li>
-              <li>annotation의 이유(reasoning)가 타당한가?</li>
-              <li>긍정적/부정적 판단이 적절한가?</li>
+              <li>{meta.criteria.desc}</li>
             </ul>
           </CriteriaText>
         </CriteriaSection>

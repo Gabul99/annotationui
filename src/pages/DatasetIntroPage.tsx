@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { loadDatasetFromPublic } from "../services/dataService";
 import type { DataPoint } from "../types";
+import { TASK_META } from "../types/taskMetaInfo";
 
 interface DatasetIntroPageProps {
   onStart: () => void;
@@ -85,6 +86,7 @@ const DatasetIntroPage: React.FC<DatasetIntroPageProps> = ({ onStart }) => {
   const [dataPoints, setDataPoints] = useState<DataPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const meta = TASK_META[datasetNumber ?? "1"];
 
   useEffect(() => {
     const loadData = async () => {
@@ -134,22 +136,16 @@ const DatasetIntroPage: React.FC<DatasetIntroPageProps> = ({ onStart }) => {
 
       <Section>
         <SectionTitle>작업 설명</SectionTitle>
-        <Content>
-          이 데이터셋은 광고 텍스트에서 감정적 표현과 행동 패턴을 분석하는
-          annotation을 평가합니다. 각 텍스트에서 하이라이트된 부분들이 적절하게
-          annotation되었는지 판단해주세요.
-        </Content>
+        <Content>{meta.intro}</Content>
       </Section>
 
       <Section>
         <SectionTitle>평가 기준</SectionTitle>
         <CriteriaBox>
           <Content>
-            각 annotation에 대해 다음을 고려하여 평가해주세요:
+            {meta.criteria.title}
             <ul>
-              <li>해당 텍스트가 감정적 표현이나 행동 패턴을 잘 나타내는가?</li>
-              <li>annotation의 이유(reasoning)가 타당한가?</li>
-              <li>긍정적/부정적 판단이 적절한가?</li>
+              <li>{meta.criteria.desc}</li>
             </ul>
           </Content>
         </CriteriaBox>
